@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Lance Jilliard Galicia builds reliable AI systems with auditable memory, grounded retrieval, deterministic evaluation, and failure-safe automation.">
+  <meta name="author" content="Lance Jilliard Galicia">
+  <meta name="theme-color" content="#080b12">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://lancimoun.github.io/">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%23080b12%22/%3E%3Cpath d=%22M18 14h9v28h19v8H18z%22 fill=%22%23e7b667%22/%3E%3C/svg%3E">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Lance Jilliard Galicia">
+  <meta property="og:title" content="Lance Jilliard Galicia — AI Systems Architect">
+  <meta property="og:description" content="Reliable AI systems: auditable memory, grounded retrieval, deterministic evaluation, and failure-safe automation.">
+  <meta property="og:url" content="https://lancimoun.github.io/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Lance Jilliard Galicia — AI Systems Architect">
+  <meta name="twitter:description" content="Reliable AI systems built to make failure visible and trust measurable.">
+<title>Lance Jilliard Galicia — AI Systems Architect</title>
+<style>
+  /* ======================================================================
+     A dark neural observatory. Committed single-theme on purpose: this is a
+     control room, not a mode. Palette — deep ink ground, warm brass as the
+     identity accent, the FORGE teal reserved for live-system signal so data
+     reads as *alive* against the architecture. Type — an editorial serif for
+     argument, a system sans for prose, mono for data and labels.
+     ====================================================================== */
+  :root{
+    --ink:#080b12; --ink-2:#0d111b; --ink-3:#131a28; --ink-4:#182135;
+    --line:#212a3c; --line-2:#2c3752;
+    --brass:#e7b667; --brass-2:#f4d199; --brass-dim:#b48a48;
+    --teal:#5ff0d0; --teal-dim:#3fae97;
+    --text:#eef2fb; --muted:#9aa6bd; --faint:#6a7690;
+    --good:#5ff0d0; --hold:#e7b667;
+
+    --serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    --mono:"SFMono-Regular","JetBrains Mono","Cascadia Code",ui-monospace,Menlo,Consolas,monospace;
+
+    --wrap:1120px;
+    --shadow:0 40px 90px -34px rgba(0,0,0,.8);
+  }
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+  body{
+    margin:0; color:var(--text); font-family:var(--sans); line-height:1.6;
+    background:
+      radial-gradient(120% 70% at 82% -6%, rgba(231,182,103,.12), transparent 42%),
+      radial-gradient(120% 90% at 6% 8%, rgba(95,240,208,.07), transparent 46%),
+      linear-gradient(180deg, var(--ink-2), var(--ink) 46%, #05070c);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden;
+  }
+  .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  a{ color:inherit; text-decoration:none; }
+
+  #net{ position:fixed; inset:0; width:100%; height:100%; z-index:0; }
+  .atmos{ position:fixed; inset:0; z-index:1; pointer-events:none;
+    background:
+      radial-gradient(140% 60% at 50% 0%, transparent 40%, rgba(4,6,11,.5) 78%, rgba(4,6,11,.92) 100%),
+      radial-gradient(120% 100% at 50% 42%, transparent 55%, rgba(3,5,9,.45) 100%); }
+  .grain{ position:fixed; inset:0; z-index:1; pointer-events:none; mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E"); }
+
+  .wrap{ width:min(var(--wrap),92vw); margin-inline:auto; position:relative; z-index:2; }
+  .eyebrow{ font-family:var(--mono); font-size:.7rem; letter-spacing:.3em; text-transform:uppercase; color:var(--brass); display:inline-flex; align-items:center; gap:12px; }
+  .eyebrow::before{ content:""; width:24px; height:1px; background:linear-gradient(90deg,var(--brass),transparent); }
+
+  /* ---------- nav ---------- */
+  nav{ position:sticky; top:0; z-index:20; }
+  .nav-in{ width:min(var(--wrap),92vw); margin-inline:auto; display:flex; align-items:center; justify-content:space-between;
+    padding:16px 0; }
+  nav.stuck{ background:rgba(8,11,18,.72); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+  .brand{ display:flex; align-items:center; gap:11px; font-family:var(--serif); font-size:1.02rem; letter-spacing:.01em; }
+  .brand .mark{ width:30px; height:30px; border-radius:9px; display:grid; place-items:center; flex:none;
+    background:linear-gradient(150deg, rgba(231,182,103,.9), rgba(180,138,72,.75)); color:#12100a; font-weight:800; font-family:var(--sans); box-shadow:0 6px 18px -6px rgba(231,182,103,.6); }
+  .nav-links{ display:flex; align-items:center; gap:30px; font-family:var(--mono); font-size:.76rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  .nav-links a{ transition:color .2s; }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{ padding:8px 15px; border-radius:999px; border:1px solid var(--brass-dim); color:var(--brass-2); }
+  .nav-cta:hover{ background:rgba(231,182,103,.1); color:var(--brass-2); }
+  @media (max-width:720px){ .nav-links a:not(.nav-cta){ display:none; } }
+
+  /* ---------- hero ---------- */
+  header.hero{ min-height:92vh; display:flex; align-items:center; padding:60px 0 90px; }
+  .glass{ padding:clamp(26px,3.2vw,46px) clamp(26px,3.4vw,52px); border-radius:20px;
+    background:linear-gradient(160deg, rgba(20,26,40,.72), rgba(10,13,20,.5));
+    border:1px solid rgba(231,182,103,.14);
+    box-shadow:0 1px 0 rgba(255,255,255,.05) inset, var(--shadow);
+    backdrop-filter:blur(14px) saturate(120%); }
+  .hero .glass{ max-width:min(700px,94%); }
+  h1.thesis{ font-family:var(--serif); font-weight:500; font-size:clamp(2.1rem,5.2vw,3.75rem); line-height:1.07; letter-spacing:-.01em; text-wrap:balance; margin:22px 0 0; }
+  h1.thesis em{ font-style:italic; color:var(--brass-2); }
+  h1.thesis .own{ font-style:italic; color:var(--teal); position:relative; }
+  h1.thesis .own::after{ content:""; position:absolute; left:0; right:0; bottom:.05em; height:2px; background:linear-gradient(90deg,var(--teal),transparent); opacity:.6; }
+  .hero .lede{ max-width:54ch; margin:24px 0 0; color:var(--muted); font-size:clamp(1rem,1.3vw,1.12rem); }
+  .hero .lede b{ color:var(--text); font-weight:600; }
+  .sig{ margin:30px 0 0; display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .sig .name{ font-family:var(--serif); font-size:1.16rem; }
+  .sig .role{ font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--faint); }
+  .hero-cta{ margin:28px 0 0; display:flex; gap:12px; flex-wrap:wrap; }
+  .btn{ font-family:var(--sans); font-size:.9rem; font-weight:600; padding:11px 20px; border-radius:11px; border:1px solid var(--line-2); color:var(--text); background:rgba(255,255,255,.03); transition:.18s; display:inline-flex; align-items:center; gap:9px; }
+  .btn:hover{ border-color:var(--brass); transform:translateY(-1px); }
+  .btn.prime{ background:linear-gradient(160deg,var(--brass),var(--brass-dim)); color:#12100a; border-color:var(--brass); }
+  .btn.prime:hover{ box-shadow:0 14px 30px -12px rgba(231,182,103,.6); }
+
+  /* ---------- section frame ---------- */
+  section.band{ padding:clamp(70px,9vw,120px) 0; }
+  .band-head{ max-width:60ch; margin-bottom:clamp(34px,4vw,54px); }
+  .band-head h2{ font-family:var(--serif); font-weight:500; font-size:clamp(1.7rem,3.4vw,2.5rem); line-height:1.12; letter-spacing:-.01em; margin:16px 0 0; text-wrap:balance; }
+  .band-head p{ color:var(--muted); margin:16px 0 0; max-width:56ch; }
+
+  /* ---------- systems grid ---------- */
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:18px; }
+  .card{ position:relative; padding:26px 24px 22px; border-radius:16px; overflow:hidden;
+    background:linear-gradient(165deg, rgba(19,26,40,.66), rgba(11,15,23,.5));
+    border:1px solid var(--line); transition:.22s; }
+  .card::before{ content:""; position:absolute; inset:0 0 auto 0; height:2px; background:linear-gradient(90deg,var(--brass),transparent); opacity:.5; transform:scaleX(.4); transform-origin:left; transition:.3s; }
+  .card:hover{ transform:translateY(-4px); border-color:var(--line-2); box-shadow:var(--shadow); }
+  .card:hover::before{ transform:scaleX(1); opacity:.9; }
+  .card .proves{ font-family:var(--mono); font-size:.66rem; letter-spacing:.18em; text-transform:uppercase; color:var(--brass-dim); display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .status{ display:inline-flex; align-items:center; gap:7px; font-size:.62rem; letter-spacing:.12em; color:var(--faint); }
+  .status .dot{ width:6px; height:6px; border-radius:50%; }
+  .status.live .dot{ background:var(--teal); box-shadow:0 0 8px var(--teal); }
+  .status.live{ color:var(--teal-dim); }
+  .status.src .dot{ background:var(--faint); }
+  .card h3{ font-family:var(--serif); font-weight:500; font-size:1.5rem; margin:14px 0 0; letter-spacing:.01em; }
+  .card .desc{ color:var(--muted); font-size:.94rem; margin:10px 0 0; }
+  .card .desc b{ color:var(--text); font-weight:600; }
+  .tags{ display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 0; }
+  .tag{ font-family:var(--mono); font-size:.66rem; letter-spacing:.03em; color:var(--muted); padding:4px 9px; border-radius:6px; background:rgba(255,255,255,.03); border:1px solid var(--line); }
+  .card .links{ display:flex; gap:16px; margin:18px 0 0; font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; }
+  .card .links a{ color:var(--brass-2); border-bottom:1px solid transparent; padding-bottom:2px; transition:.18s; }
+  .card .links a:hover{ border-color:var(--brass); }
+  .card .links a.ghost{ color:var(--faint); }
+  .card .links a.ghost:hover{ color:var(--muted); border-color:var(--line-2); }
+
+  /* ---------- thesis band ---------- */
+  .manifesto{ display:grid; grid-template-columns:1.1fr .9fr; gap:clamp(30px,5vw,70px); align-items:center; }
+  @media (max-width:820px){ .manifesto{ grid-template-columns:1fr; } }
+  .pull{ font-family:var(--serif); font-weight:500; font-size:clamp(1.5rem,3vw,2.15rem); line-height:1.22; letter-spacing:-.005em; }
+  .pull .architects{ color:var(--brass-2); font-style:italic; }
+  .pull .fuel{ color:var(--faint); font-style:italic; }
+  .manifesto .side p{ color:var(--muted); margin:0 0 16px; }
+  .manifesto .side .book{ display:inline-flex; align-items:center; gap:10px; margin-top:8px; padding:13px 18px; border-radius:12px; border:1px solid var(--line-2); font-family:var(--mono); font-size:.76rem; letter-spacing:.06em; color:var(--brass-2); }
+  .manifesto .side .book:hover{ border-color:var(--brass); background:rgba(231,182,103,.06); }
+
+  /* ---------- proof band ---------- */
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+  @media (max-width:720px){ .stats{ grid-template-columns:repeat(2,1fr); } }
+  .stat{ padding:22px 20px; border-radius:14px; border:1px solid var(--line); background:linear-gradient(165deg, rgba(19,26,40,.5), rgba(11,15,23,.4)); }
+  .stat .n{ font-family:var(--serif); font-size:clamp(1.8rem,3.4vw,2.5rem); color:var(--text); font-variant-numeric:tabular-nums; letter-spacing:-.01em; }
+  .stat .n .u{ color:var(--brass); font-size:.5em; }
+  .stat .k{ font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase; color:var(--faint); margin-top:6px; }
+  .creds{ margin-top:26px; display:flex; flex-wrap:wrap; gap:10px 26px; font-family:var(--mono); font-size:.76rem; color:var(--muted); }
+  .creds span{ display:inline-flex; align-items:center; gap:9px; }
+  .creds .b{ color:var(--brass); }
+
+  /* ---------- contact / footer ---------- */
+  .contact .glass{ display:flex; align-items:center; justify-content:space-between; gap:30px; flex-wrap:wrap; }
+  .contact h2{ font-family:var(--serif); font-weight:500; font-size:clamp(1.6rem,3.2vw,2.3rem); margin:0; text-wrap:balance; }
+  .contact p{ color:var(--muted); margin:12px 0 0; }
+  .clinks{ display:flex; gap:12px; flex-wrap:wrap; }
+  footer.foot{ padding:34px 0 46px; border-top:1px solid var(--line); margin-top:20px; }
+  .foot-in{ display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--mono); font-size:.7rem; letter-spacing:.08em; color:var(--faint); text-transform:uppercase; }
+  .foot-in b{ color:var(--brass-dim); font-weight:500; }
+
+  /* ---------- scroll reveal ---------- */
+  .reveal{ opacity:0; transform:translateY(18px); transition:opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in{ opacity:1; transform:none; }
+  .stagger>*{ opacity:0; transform:translateY(16px); transition:opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .stagger.in>*{ opacity:1; transform:none; }
+  .stagger.in>*:nth-child(2){ transition-delay:.06s } .stagger.in>*:nth-child(3){ transition-delay:.12s }
+  .stagger.in>*:nth-child(4){ transition-delay:.18s } .stagger.in>*:nth-child(5){ transition-delay:.24s }
+  .stagger.in>*:nth-child(6){ transition-delay:.30s } .stagger.in>*:nth-child(7){ transition-delay:.36s }
+  @media (prefers-reduced-motion:reduce){ .reveal,.stagger>*{ opacity:1 !important; transform:none !important; transition:none; } }
+
+  .scrollcue{ position:absolute; left:50%; bottom:26px; transform:translateX(-50%); font-family:var(--mono); font-size:.62rem; letter-spacing:.24em; text-transform:uppercase; color:var(--faint); z-index:2; }
+  .scrollcue span{ display:block; width:1px; height:34px; margin:10px auto 0; background:linear-gradient(var(--brass),transparent); animation:cue 2.2s ease-in-out infinite; }
+  @keyframes cue{ 0%,100%{ opacity:.3; transform:scaleY(.6); } 50%{ opacity:1; transform:scaleY(1); } }
+  @media (prefers-reduced-motion:reduce){ .scrollcue span{ animation:none; } }
+</style>
+</head>
+<body>
+
+<h2 class="sr-only">Portfolio of Lance Jilliard Galicia, an AI systems architect building reliability infrastructure for AI agents — memory that audits itself, retrieval that proves its answers, and evaluation harnesses. Sections: the FORGE family of systems, his thesis, credentials, and contact.</h2>
+
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="atmos" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+
+<nav id="nav"><div class="nav-in">
+  <a class="brand" href="#top"><span class="mark">L</span>Lance&nbsp;Jilliard&nbsp;Galicia</a>
+  <div class="nav-links">
+    <a href="#systems">Systems</a>
+    <a href="#thesis">Thesis</a>
+    <a href="#contact" class="nav-cta">Get in touch</a>
+  </div>
+</div></nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <section class="glass">
+      <p class="eyebrow reveal in">The architect's thesis</p>
+      <h1 class="thesis reveal in">AI serves whoever <em>directs</em> it.<br>It belongs to whoever <span class="own">owns</span> it.</h1>
+      <p class="lede reveal in">I build the layer that makes directing it <b>trustworthy</b> — memory that audits its own beliefs, retrieval that proves every answer, and agents that fail closed instead of confidently wrong. Six live systems, each one proving a single property production AI actually needs.</p>
+      <p class="sig reveal in"><span class="name">Lance Jilliard Galicia</span><span class="role">AI Systems Architect · Manila · GMT+8 · open to remote</span></p>
+      <div class="hero-cta reveal in">
+        <a class="btn prime" href="#systems">Explore the systems →</a>
+        <a class="btn" href="https://github.com/Lancimoun" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </section>
+  </div>
+  <div class="scrollcue" aria-hidden="true">Scroll<span></span></div>
+</header>
+
+<section class="band" id="systems">
+  <div class="wrap">
+    <div class="band-head reveal">
+      <p class="eyebrow">The FORGE family</p>
+      <h2>Not a portfolio of demos. A set of proofs — each system settles one question production AI keeps failing.</h2>
+      <p>Every project below isolates a single reliability property and makes it visible, testable, and live. The point isn't that the AI answered. It's that you can see whether it can be trusted to.</p>
+    </div>
+
+    <div class="grid stagger">
+
+      <article class="card">
+        <div class="proves"><span>Proves · provable answers</span><span class="status live"><span class="dot"></span>Live</span></div>
+        <h3>LEMMA</h3>
+        <p class="desc">A research assistant that <b>proves</b> its answers. Hybrid retrieval (dense + BM25 + RRF), native citations to the exact passage, and bounded multi-hop search that decides how hard to look — with a live panel measuring its own recall, latency and cost.</p>
+        <div class="tags"><span class="tag">RAG</span><span class="tag">citations</span><span class="tag">multi-hop</span><span class="tag">FastAPI</span><span class="tag">67 tests</span></div>
+        <div class="links"><a href="https://lemma-production-b84f.up.railway.app" target="_blank" rel="noopener">Live demo ↗</a><a class="ghost" href="https://github.com/Lancimoun/lemma" target="_blank" rel="noopener">Source</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · accountable memory</span><span class="status live"><span class="dot"></span>Live</span></div>
+        <h3>ENGRAM</h3>
+        <p class="desc">A memory-reliability <b>ledger</b> for AI agents, with a 3D observatory you fly through. What an agent believed, when it changed, what evidence triggered the revision, what decayed and was restored — WAL-hardened, proven with 24 concurrent writers losing zero records.</p>
+        <div class="tags"><span class="tag">memory</span><span class="tag">provenance</span><span class="tag">Three.js</span><span class="tag">SQLite</span></div>
+        <div class="links"><a href="https://engram-production-1a6b.up.railway.app" target="_blank" rel="noopener">Live observatory ↗</a><a class="ghost" href="https://github.com/Lancimoun/engram" target="_blank" rel="noopener">Source</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · one door, every model</span><span class="status live"><span class="dot"></span>Live</span></div>
+        <h3>Axiom AI</h3>
+        <p class="desc">A unified gateway across Claude, GPT, Gemini and Groq — streaming, auth, usage tracking. Its <b>Failure Contract Lab</b> lets you click the failure path: broken streams end with a named error, not a fake success; failed calls never corrupt a session.</p>
+        <div class="tags"><span class="tag">LLM gateway</span><span class="tag">SSE</span><span class="tag">reliability</span><span class="tag">30 tests</span></div>
+        <div class="links"><a href="https://axiom-ai-production-aaec.up.railway.app/#failure-lab" target="_blank" rel="noopener">Failure Lab ↗</a><a class="ghost" href="https://github.com/Lancimoun/axiom-ai" target="_blank" rel="noopener">Source</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · agents get tested</span><span class="status live"><span class="dot"></span>Live</span></div>
+        <h3>Agent Reliability Arena</h3>
+        <p class="desc">An eval harness that catches what breaks agents in production: stale memory stated as truth, unsupported tool claims, answer drift, and long-horizon trend decay. Deterministic scoring — honest missing data over a fabricated leaderboard.</p>
+        <div class="tags"><span class="tag">evals</span><span class="tag">observability</span><span class="tag">deterministic</span></div>
+        <div class="links"><a href="https://lancimoun.github.io/agent-reliability-arena/" target="_blank" rel="noopener">Live board ↗</a><a class="ghost" href="https://github.com/Lancimoun/agent-reliability-arena" target="_blank" rel="noopener">Source</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · automation fails safely</span><span class="status src"><span class="dot"></span>Source · v0.1</span></div>
+        <h3>FlowProof</h3>
+        <p class="desc">The operational half of reliability. Idempotent intake so a retried webhook creates <b>nothing twice</b>; bounded retries that end in an auditable dead-letter state instead of looping forever; human approval before ambiguous work runs. Every attempt in the ledger.</p>
+        <div class="tags"><span class="tag">idempotency</span><span class="tag">audit trail</span><span class="tag">FastAPI</span><span class="tag">35 tests</span></div>
+        <div class="links"><a href="https://github.com/Lancimoun/flowproof" target="_blank" rel="noopener">Source ↗</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · systems you can explore</span><span class="status live"><span class="dot"></span>Live</span></div>
+        <h3>FORGE Neural Map</h3>
+        <p class="desc">A real codebase rendered as a navigable 3D universe — <b>2,778 nodes · 7,295 connections · 157 systems</b> — vanilla Three.js with GPU-shader layout over a live knowledge graph. Complexity you can fly through instead of read.</p>
+        <div class="tags"><span class="tag">Three.js</span><span class="tag">WebGL</span><span class="tag">dataviz</span></div>
+        <div class="links"><a href="https://forge-neural-map-production.up.railway.app/" target="_blank" rel="noopener">Live map ↗</a><a class="ghost" href="https://github.com/Lancimoun/forge-neural-map" target="_blank" rel="noopener">Source</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · AI that compounds</span><span class="status src"><span class="dot"></span>Private · running 24/7</span></div>
+        <h3>Project Maxima</h3>
+        <p class="desc">My 24/7 personal AI partner — <b>219 callable tools</b>, persistent long-horizon memory, current-truth override, and proactive pattern detection across weeks. Built and run non-stop since March; this year I took its 7,789-line core apart with a net of tests, live, without breaking it.</p>
+        <div class="tags"><span class="tag">agents</span><span class="tag">long-horizon memory</span><span class="tag">tool use</span></div>
+        <div class="links"><a class="ghost" href="#thesis">Why it's private ↓</a></div>
+      </article>
+
+      <article class="card">
+        <div class="proves"><span>Proves · agents that self-govern</span><span class="status live"><span class="dot"></span>Open source</span></div>
+        <h3>LOOPKIT</h3>
+        <p class="desc">A file-based operating system for self-improving autonomous loops: a charter, an append-only log, a fleet dashboard, a golden regression set, and a captions airlock so it can never post as you. Born from a documented run where its own audit caught it inflating a number and forced a correction.</p>
+        <div class="tags"><span class="tag">agent autonomy</span><span class="tag">governance</span><span class="tag">MIT</span></div>
+        <div class="links"><a href="https://github.com/Lancimoun/loopkit" target="_blank" rel="noopener">Source ↗</a></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="band" id="thesis">
+  <div class="wrap manifesto">
+    <div class="reveal">
+      <p class="eyebrow" style="margin-bottom:22px">Why I build this</p>
+      <p class="pull">The next useful AI layer isn't a bigger chat window. It's infrastructure for agents that preserve context, update beliefs when the evidence changes, and never pass stale memory off as current truth.<br><br>AI will divide people into <span class="architects">architects</span> — those who deliberately build with it — and <span class="fuel">fuel</span>. I'm building to stay on the first side, and to make that side trustworthy enough to hand real work.</p>
+    </div>
+    <div class="side reveal">
+      <p>Most portfolios prove a candidate <em>finished</em> the work. Mine is built to prove I can judge whether the work is <b style="color:var(--text)">good</b> — every system defines a failure mode, builds a repeatable pipeline, and proves progress with a credible evaluation setup.</p>
+      <p>Project Maxima stays private because it holds real, personal long-horizon memory — the thing the whole thesis is about. The public systems are how I show the engineering without exposing the data.</p>
+      <a class="book" href="https://fearless-quietude-production.up.railway.app/" target="_blank" rel="noopener">Read the manifesto → <span style="color:var(--faint)">AI Will Not Benefit Humans</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="proof">
+  <div class="wrap">
+    <div class="band-head reveal"><p class="eyebrow">At a glance</p></div>
+    <div class="stats stagger">
+      <div class="stat"><div class="n">6<span class="u"> live</span></div><div class="k">Systems deployed</div></div>
+      <div class="stat"><div class="n">219</div><div class="k">Tools in Maxima</div></div>
+      <div class="stat"><div class="n">3<span class="u">-agent</span></div><div class="k">Self-governing loop</div></div>
+      <div class="stat"><div class="n">100<span class="u">%</span></div><div class="k">Reliability-first</div></div>
+    </div>
+    <div class="creds reveal">
+      <span><b class="b">◆</b> B.S. Information Technology — STI, 2025</span>
+      <span><b class="b">◆</b> CCNA ×2 — Cisco / NetAcad</span>
+      <span><b class="b">◆</b> Sagility · US healthcare ops · trained 15+ agents · KT lead deployed to Hyderabad at 24</span>
+    </div>
+  </div>
+</section>
+
+<section class="band contact" id="contact">
+  <div class="wrap reveal">
+    <div class="glass">
+      <div>
+        <p class="eyebrow" style="margin-bottom:16px">Open to remote AI roles</p>
+        <h2>Building the layer that makes AI trustworthy. Let's talk.</h2>
+        <p>AI systems, LLM agents, RAG, reliability engineering. Manila · GMT+8 · comfortable across timezones.</p>
+      </div>
+      <div class="clinks">
+        <a class="btn prime" href="mailto:lancejilliard.galicia@gmail.com">Email me</a>
+        <a class="btn" href="https://www.linkedin.com/in/lance-jilliard-galicia-8b5b99312" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" href="https://github.com/Lancimoun" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="foot"><div class="wrap"><div class="foot-in">
+  <span>Lance Jilliard Galicia — <b>AI Systems Architect</b></span>
+  <span>Built by hand · live 3D field on raw canvas · no libraries</span>
+</div></div></footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- ambient 3D neural field ---------- */
+  var canvas=document.getElementById("net"), ctx=canvas.getContext("2d");
+  var W=0,H=0,DPR=1,cx=0,cy=0;
+  function resize(){ DPR=Math.min(window.devicePixelRatio||1,2); W=innerWidth; H=innerHeight;
+    canvas.width=W*DPR; canvas.height=H*DPR; canvas.style.width=W+"px"; canvas.style.height=H+"px";
+    ctx.setTransform(DPR,0,0,DPR,0,0); cx=W*0.66; cy=H*0.42; }
+  resize(); addEventListener("resize",resize);
+
+  var N = W<680?80:130, nodes=[];
+  for(var i=0;i<N;i++){ var u=Math.random(),v=Math.random(),th=2*Math.PI*u,ph=Math.acos(2*v-1),r=Math.pow(Math.random(),.62);
+    nodes.push({x:Math.sin(ph)*Math.cos(th)*r, y:Math.sin(ph)*Math.sin(th)*r*.82, z:Math.cos(ph)*r, hub:Math.random()<.10, ph:Math.random()*6.28}); }
+  var edges=[];
+  for(var a=0;a<N;a++){ var near=[];
+    for(var b=0;b<N;b++){ if(a===b)continue; var dx=nodes[a].x-nodes[b].x,dy=nodes[a].y-nodes[b].y,dz=nodes[a].z-nodes[b].z,d=dx*dx+dy*dy+dz*dz; if(d<.16)near.push({b:b,d:d}); }
+    near.sort(function(p,q){return p.d-q.d;}); for(var k=0;k<Math.min(near.length,3);k++){ if(a<near[k].b)edges.push([a,near[k].b]); } }
+  var pulses=[]; function spawn(){ if(edges.length)pulses.push({e:(Math.random()*edges.length)|0,t:0,sp:.004+Math.random()*.006}); }
+  for(var p=0;p<9;p++)spawn();
+
+  var ang=0,tx=0,ty=0,mx=0,my=0,t0=performance.now(),scrollFade=1;
+  addEventListener("pointermove",function(e){ mx=e.clientX/W-.5; my=e.clientY/H-.5; });
+  addEventListener("scroll",function(){ scrollFade=Math.max(.35, 1 - (scrollY/H)*0.5); },{passive:true});
+
+  function proj(n,c,s,ttx,tty){ var x=n.x*c-n.z*s, z=n.x*s+n.z*c, y=n.y-tty*.25; x+=ttx*.25;
+    var f=2.2, sc=f/(f-z), R=Math.min(W,H)*.42; return {sx:cx+x*R*sc, sy:cy+y*R*sc, d:(z+1)/2, sc:sc}; }
+  function frame(now){ var dt=Math.min((now-t0)/1000,.05); t0=now;
+    if(!reduce)ang+=dt*.13; tx+=(mx-tx)*.05; ty+=(my-ty)*.05;
+    ctx.clearRect(0,0,W,H); ctx.globalAlpha=scrollFade;
+    var c=Math.cos(ang),s=Math.sin(ang),P=new Array(N);
+    for(var i=0;i<N;i++)P[i]=proj(nodes[i],c,s,tx,ty);
+    ctx.lineWidth=1;
+    for(var e=0;e<edges.length;e++){ var A=P[edges[e][0]],B=P[edges[e][1]],dep=(A.d+B.d)/2;
+      ctx.strokeStyle="rgba(95,240,208,"+(.04+dep*.2).toFixed(3)+")"; ctx.beginPath(); ctx.moveTo(A.sx,A.sy); ctx.lineTo(B.sx,B.sy); ctx.stroke(); }
+    for(var q=pulses.length-1;q>=0;q--){ var pu=pulses[q]; pu.t+=reduce?0:pu.sp; if(pu.t>=1){ pulses.splice(q,1); spawn(); continue; }
+      var ed=edges[pu.e],Aa=P[ed[0]],Bb=P[ed[1]],px=Aa.sx+(Bb.sx-Aa.sx)*pu.t,py=Aa.sy+(Bb.sy-Aa.sy)*pu.t;
+      var g=ctx.createRadialGradient(px,py,0,px,py,7); g.addColorStop(0,"rgba(220,255,246,.9)"); g.addColorStop(1,"rgba(95,240,208,0)");
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(px,py,7,0,7); ctx.fill(); }
+    var order=[]; for(var n2=0;n2<N;n2++)order.push(n2); order.sort(function(u,w){return P[u].d-P[w].d;});
+    for(var o=0;o<N;o++){ var idx=order[o],pt=P[idx],nd=nodes[idx],dep=pt.d,size=(nd.hub?2.6:1.5)*pt.sc*(.55+dep*.9),
+      pl=reduce?1:(.75+.25*Math.sin(now/700+nd.ph)),al=(.18+dep*.8)*pl;
+      ctx.beginPath(); ctx.arc(pt.sx,pt.sy,Math.max(size,.4),0,7);
+      if(nd.hub){ ctx.fillStyle="rgba(231,182,103,"+al.toFixed(3)+")"; ctx.shadowColor="rgba(231,182,103,.9)"; ctx.shadowBlur=12*dep; }
+      else{ ctx.fillStyle="rgba(150,245,222,"+al.toFixed(3)+")"; ctx.shadowColor="rgba(95,240,208,.8)"; ctx.shadowBlur=8*dep; }
+      ctx.fill(); ctx.shadowBlur=0; }
+    ctx.globalAlpha=1; requestAnimationFrame(frame); }
+  requestAnimationFrame(frame);
+
+  /* ---------- sticky nav ---------- */
+  var nav=document.getElementById("nav");
+  addEventListener("scroll",function(){ nav.classList.toggle("stuck", scrollY>40); },{passive:true});
+
+  /* ---------- scroll reveal ---------- */
+  if("IntersectionObserver" in window && !reduce){
+    var io=new IntersectionObserver(function(en){ en.forEach(function(x){ if(x.isIntersecting){ x.target.classList.add("in"); io.unobserve(x.target); } }); },{threshold:.16, rootMargin:"0px 0px -8% 0px"});
+    document.querySelectorAll(".reveal,.stagger").forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll(".reveal,.stagger").forEach(function(el){ el.classList.add("in"); });
+  }
+})();
+</script>
+</body>
+</html>
