@@ -53,6 +53,11 @@
     -webkit-font-smoothing:antialiased; overflow-x:hidden;
   }
   .sr-only{ position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
+  /* Skip link: hidden until focused, then the first thing Tab reaches. Without it
+     a keyboard or screen-reader visitor walks the whole nav on every arrival. */
+  .skip{ position:absolute; left:-9999px; top:0; z-index:100; }
+  .skip:focus{ left:12px; top:12px; padding:10px 16px; background:var(--brass,#e7b667); color:#0a0d14;
+    border-radius:8px; font-weight:700; font-size:.9rem; }
   a{ color:inherit; text-decoration:none; }
 
   #net{ position:fixed; inset:0; width:100%; height:100%; z-index:0; }
@@ -184,6 +189,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <h2 class="sr-only">Portfolio of Architect L., an AI systems architect building reliability infrastructure for AI agents — memory that audits itself, retrieval that proves its answers, and evaluation harnesses. Sections: the FORGE family of systems, his thesis, credentials, and contact.</h2>
 
 <canvas id="net" aria-hidden="true"></canvas>
@@ -199,6 +206,7 @@
   </div>
 </div></nav>
 
+<main id="main">
 <header class="hero" id="top">
   <div class="wrap">
     <section class="glass">
@@ -340,6 +348,8 @@
     </div>
   </div>
 </section>
+
+</main>
 
 <footer class="foot"><div class="wrap"><div class="foot-in">
   <span>Architect L. — <b>AI Systems Architect</b></span>
