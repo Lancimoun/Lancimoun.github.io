@@ -1,6 +1,6 @@
 # Lancimoun.github.io
 
-Launch-ready source for Lance Jilliard Galicia's portfolio front door.
+Launch-ready source for Architect L.'s portfolio front door.
 
 The site presents the FORGE family as a set of reliability proofs: auditable memory, grounded retrieval, deterministic evaluation, safe automation, and observable failure behavior. Its neural-field motion is implemented with the browser canvas API and has no runtime dependencies.
 
