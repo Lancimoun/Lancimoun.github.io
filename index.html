@@ -394,8 +394,34 @@
       if(nd.hub){ ctx.fillStyle="rgba(231,182,103,"+al.toFixed(3)+")"; ctx.shadowColor="rgba(231,182,103,.9)"; ctx.shadowBlur=12*dep; }
       else{ ctx.fillStyle="rgba(150,245,222,"+al.toFixed(3)+")"; ctx.shadowColor="rgba(95,240,208,.8)"; ctx.shadowBlur=8*dep; }
       ctx.fill(); ctx.shadowBlur=0; }
-    ctx.globalAlpha=1; requestAnimationFrame(frame); }
-  requestAnimationFrame(frame);
+    ctx.globalAlpha=1; if(running) rafId=requestAnimationFrame(frame); }
+
+  /* Draw only when the field is actually on screen, and only if motion is wanted.
+     The page is ~7,000px tall: most of a visit is spent scrolled past this hero,
+     and every frame projects 130 nodes, depth-sorts them and strokes ~200 edges
+     with shadowBlur — the most expensive canvas op there is. Left unguarded that
+     burns a visitor's battery to render a picture they cannot see. */
+  var running=false, rafId=0;
+  function start(){ if(running||reduce)return; running=true; t0=performance.now(); rafId=requestAnimationFrame(frame); }
+  function stop(){ running=false; if(rafId){ cancelAnimationFrame(rafId); rafId=0; } }
+
+  if(reduce){
+    /* Reduced motion means a still image, not a stalled animation: rotation and
+       pulses were already frozen, but the loop still redrew the identical frame
+       forever. Paint it once and stop. */
+    frame(performance.now());  /* running stays false, so the tail cannot reschedule */
+  } else if("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){ en[0].isIntersecting?start():stop(); },{threshold:0})
+      .observe(canvas);
+  } else {
+    start();
+  }
+  /* A background tab should cost nothing. Browsers throttle rAF when hidden but
+     do not reliably stop it; saying so explicitly is one line. */
+  document.addEventListener("visibilitychange",function(){
+    if(document.hidden) stop();
+    else if(!reduce && canvas.getBoundingClientRect().bottom>0) start();
+  });
 
   /* ---------- sticky nav ---------- */
   var nav=document.getElementById("nav");
