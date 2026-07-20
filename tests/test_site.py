@@ -64,8 +64,20 @@ class PortfolioSurfaceTests(unittest.TestCase):
         self.assertIn("if(\"IntersectionObserver\" in window && !reduce)", self.html)
 
     def test_pinned_public_claims_are_present(self) -> None:
+        """Presence only — this does NOT verify the numbers are true.
+
+        These are hardcoded literals because this repo ships alone: it cannot
+        reach the other projects to count their tests. That makes this test a
+        guard against a claim being *deleted*, not against it going *stale* —
+        and the distinction bit us: LEMMA grew 67 -> 72 tests, and this test's
+        literal actively kept the page wrong, because correcting the page broke
+        the suite. When a number here changes, update it here too.
+
+        Accuracy is verified outside this repo by `LOOP/audit_frontdoor.py`,
+        which cross-checks every figure against the measured fleet record.
+        """
         for claim in (
-            "67 tests",
+            "72 tests",
             "30 tests",
             "35 tests",
             "2,778 nodes",
