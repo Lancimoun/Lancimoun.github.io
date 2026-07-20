@@ -88,33 +88,40 @@ class PortfolioSurfaceTests(unittest.TestCase):
             with self.subTest(claim=claim):
                 self.assertIn(claim, self.html)
 
-    def test_neural_field_loop_can_stop(self) -> None:
-        """The hero animation must never be able to run unconditionally forever.
+    def test_reduced_motion_paints_one_frame_instead_of_looping(self) -> None:
+        """Under prefers-reduced-motion the hero must settle, not spin in place.
 
         STRUCTURAL GUARD ONLY -- read what this does and does not prove.
 
-        It proves the *source* still contains a stop path: the self-reschedule is
-        behind a condition, a cancel exists, and the canvas is watched by an
-        IntersectionObserver. It does NOT prove the loop actually stops at
-        runtime; that needs a browser executing rAF, which the machine this was
-        written on could not provide (rAF never fired in the available preview,
-        so no runtime claim was made). Runtime behaviour is verified fleet-wide
-        by `LOOP/audit_animation_loops.py`, which scopes its check to the loop
-        body rather than the file -- the distinction matters, because a
-        `cancelAnimationFrame` belonging to some *other* animation in the same
-        file looks identical to a real guard when you grep at file scope.
+        It proves the *source* keeps a stop path: the reschedule sits behind the
+        `running` flag, a cancel exists, and the reduced-motion branch calls
+        `frame(...)` directly rather than starting the loop. It does NOT prove
+        runtime behaviour; that needs a browser executing rAF against a fronted
+        tab, which was not available where this was written, so no runtime claim
+        is made here.
 
-        Why it is worth guarding at all: the page is ~7,000px tall and the hero
-        draws 130 depth-sorted nodes plus ~200 shadow-blurred edges per frame, so
-        an unguarded loop bills a reader's battery for a picture scrolled far off
-        screen. That was the live behaviour until iteration 128.
+        What it is actually protecting, stated precisely because the first
+        version of this test protected the wrong thing: under reduced motion the
+        rotation and pulses are already frozen, so the loop redrew a
+        pixel-identical frame at 60fps forever, for a visitor who had explicitly
+        asked their operating system for less motion. That is the real defect.
+
+        It deliberately does NOT assert an IntersectionObserver on the canvas.
+        `#net` is `position:fixed; inset:0` and is pinned to the viewport, so it
+        never scrolls out of view -- an observer on it always reports intersecting
+        and can stop nothing. An earlier pass added one and this test asserted it,
+        which meant the suite was enforcing the presence of inert code shaped
+        like a guard.
         """
         script = self.html[self.html.find("<script"):]
         self.assertIn("cancelAnimationFrame", script)
-        self.assertIn("IntersectionObserver", script)
         self.assertRegex(
             script, r"if\s*\(\s*running\s*\)\s*rafId\s*=\s*requestAnimationFrame",
             "the frame loop must reschedule only while running",
+        )
+        self.assertRegex(
+            script, r"if\(reduce\)\{[^}]*frame\(performance\.now\(\)\)",
+            "reduced motion must paint a single frame rather than start the loop",
         )
         self.assertNotRegex(
             script, r"ctx\.globalAlpha=1;\s*requestAnimationFrame\(frame\);",

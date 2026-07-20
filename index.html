@@ -396,31 +396,34 @@
       ctx.fill(); ctx.shadowBlur=0; }
     ctx.globalAlpha=1; if(running) rafId=requestAnimationFrame(frame); }
 
-  /* Draw only when the field is actually on screen, and only if motion is wanted.
-     The page is ~7,000px tall: most of a visit is spent scrolled past this hero,
-     and every frame projects 130 nodes, depth-sorts them and strokes ~200 edges
-     with shadowBlur — the most expensive canvas op there is. Left unguarded that
-     burns a visitor's battery to render a picture they cannot see. */
+  /* NO off-screen guard here, deliberately — and the reason is worth stating so
+     nobody "fixes" it back.
+     #net is `position:fixed; inset:0`, so it is pinned to the viewport and is
+     never scrolled out of view; scrolling *dims* it (see scrollFade above), it
+     does not hide it. An IntersectionObserver on this canvas therefore always
+     reports intersecting and can never stop anything. A first pass at this file
+     added one anyway, on the theory that a ~7,000px page must scroll its hero
+     away. It cannot. The observer was inert code shaped exactly like a guard,
+     which is worse than no guard at all: it reads as protection during review
+     and provides none. */
   var running=false, rafId=0;
   function start(){ if(running||reduce)return; running=true; t0=performance.now(); rafId=requestAnimationFrame(frame); }
   function stop(){ running=false; if(rafId){ cancelAnimationFrame(rafId); rafId=0; } }
 
   if(reduce){
-    /* Reduced motion means a still image, not a stalled animation: rotation and
-       pulses were already frozen, but the loop still redrew the identical frame
-       forever. Paint it once and stop. */
+    /* The one guard here that pays for itself. Under reduced motion the rotation
+       and the pulses were already frozen — so the loop redrew a pixel-identical
+       frame at 60fps, forever, for a visitor who had explicitly asked their
+       machine for less motion. Paint it once and stop. */
     frame(performance.now());  /* running stays false, so the tail cannot reschedule */
-  } else if("IntersectionObserver" in window){
-    new IntersectionObserver(function(en){ en[0].isIntersecting?start():stop(); },{threshold:0})
-      .observe(canvas);
   } else {
     start();
   }
-  /* A background tab should cost nothing. Browsers throttle rAF when hidden but
-     do not reliably stop it; saying so explicitly is one line. */
+  /* Modest, honest saving: Chrome already throttles rAF in a hidden tab to about
+     one frame every several seconds (measured in a real browser, not assumed).
+     Stopping outright is still better than a trickle, and it costs two lines. */
   document.addEventListener("visibilitychange",function(){
-    if(document.hidden) stop();
-    else if(!reduce && canvas.getBoundingClientRect().bottom>0) start();
+    if(document.hidden) stop(); else start();
   });
 
   /* ---------- sticky nav ---------- */
