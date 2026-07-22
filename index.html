@@ -117,7 +117,7 @@
   .band-head p{ color:var(--muted); margin:16px 0 0; max-width:56ch; }
 
   /* ---------- systems grid ---------- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:18px; }
+  .grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr)); gap:18px; }
   .card{ position:relative; padding:26px 24px 22px; border-radius:16px; overflow:hidden;
     background:linear-gradient(165deg, rgba(19,26,40,.66), rgba(11,15,23,.5));
     border:1px solid var(--line); transition:.22s; }
