@@ -77,6 +77,7 @@ class PortfolioSurfaceTests(unittest.TestCase):
         self.assertNotIn("this repository stays local", self.readme)
 
     def test_ci_actions_use_node24_releases(self) -> None:
+        self.assertIn("workflow_dispatch:", self.workflow)
         self.assertIn("uses: actions/checkout@v5", self.workflow)
         self.assertIn("uses: actions/setup-python@v6", self.workflow)
         self.assertNotIn("uses: actions/checkout@v4", self.workflow)
