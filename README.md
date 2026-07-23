@@ -85,6 +85,8 @@ python -m unittest discover -s tests -v
 The suite checks the document shell, semantic landmarks, link safety, external
 runtime dependencies, reduced-motion behavior, public claim literals, social
 metadata, the preview asset's PNG signature, and its exact 1200×630 dimensions.
+CI pins the Node 24 releases of `actions/checkout` and `actions/setup-python`
+so the workflow does not depend on GitHub's deprecated Node 20 action runtime.
 
 From the parent `REVIVAL CLAUDE` workspace, run the fleet-level gates:
 
