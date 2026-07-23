@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
 README = ROOT / "README.md"
 OG_IMAGE = ROOT / "assets" / "architect-l-social-card.png"
+WORKFLOW = ROOT / ".github" / "workflows" / "ci.yml"
 
 
 class _SurfaceParser(HTMLParser):
@@ -38,6 +39,7 @@ class PortfolioSurfaceTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.html = INDEX.read_text(encoding="utf-8")
         cls.readme = README.read_text(encoding="utf-8")
+        cls.workflow = WORKFLOW.read_text(encoding="utf-8")
         cls.parser = _SurfaceParser()
         cls.parser.feed(cls.html)
 
@@ -73,6 +75,12 @@ class PortfolioSurfaceTests(unittest.TestCase):
         self.assertIn("actions/workflows/ci.yml/badge.svg", self.readme)
         self.assertNotIn("has not been created or published", self.readme)
         self.assertNotIn("this repository stays local", self.readme)
+
+    def test_ci_actions_use_node24_releases(self) -> None:
+        self.assertIn("uses: actions/checkout@v5", self.workflow)
+        self.assertIn("uses: actions/setup-python@v6", self.workflow)
+        self.assertNotIn("uses: actions/checkout@v4", self.workflow)
+        self.assertNotIn("uses: actions/setup-python@v5", self.workflow)
 
     def test_semantics_and_link_safety(self) -> None:
         self.assertEqual(self.parser.h1_count, 1)
