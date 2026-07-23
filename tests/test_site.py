@@ -3,12 +3,15 @@
 from __future__ import annotations
 
 import re
+import struct
 import unittest
 from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
+README = ROOT / "README.md"
+OG_IMAGE = ROOT / "assets" / "architect-l-social-card.png"
 
 
 class _SurfaceParser(HTMLParser):
@@ -34,6 +37,7 @@ class PortfolioSurfaceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.html = INDEX.read_text(encoding="utf-8")
+        cls.readme = README.read_text(encoding="utf-8")
         cls.parser = _SurfaceParser()
         cls.parser.feed(cls.html)
 
@@ -46,6 +50,29 @@ class PortfolioSurfaceTests(unittest.TestCase):
         self.assertIn('rel="canonical" href="https://lancimoun.github.io/"', self.html)
         self.assertIn('property="og:title"', self.html)
         self.assertIn('name="twitter:card"', self.html)
+
+    def test_social_preview_is_a_real_large_card(self) -> None:
+        image_url = "https://lancimoun.github.io/assets/architect-l-social-card.png"
+        self.assertIn(f'property="og:image" content="{image_url}"', self.html)
+        self.assertIn('property="og:image:width" content="1200"', self.html)
+        self.assertIn('property="og:image:height" content="630"', self.html)
+        self.assertIn('property="og:image:alt"', self.html)
+        self.assertIn('name="twitter:card" content="summary_large_image"', self.html)
+        self.assertIn(f'name="twitter:image" content="{image_url}"', self.html)
+        self.assertIn('name="twitter:image:alt"', self.html)
+
+        data = OG_IMAGE.read_bytes()
+        self.assertEqual(data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", data[16:24])
+        self.assertEqual((width, height), (1200, 630))
+        self.assertGreater(len(data), 100_000)
+
+    def test_readme_describes_the_live_front_door_truthfully(self) -> None:
+        self.assertIn("https://lancimoun.github.io/", self.readme)
+        self.assertIn("assets/architect-l-social-card.png", self.readme)
+        self.assertIn("actions/workflows/ci.yml/badge.svg", self.readme)
+        self.assertNotIn("has not been created or published", self.readme)
+        self.assertNotIn("this repository stays local", self.readme)
 
     def test_semantics_and_link_safety(self) -> None:
         self.assertEqual(self.parser.h1_count, 1)
